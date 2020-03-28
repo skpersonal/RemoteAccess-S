@@ -1,0 +1,7 @@
+name: RemoteAccess-S
+version: ${project.version}
+main: com.github.skpersonal.remoteaccesss.RemoteAccessS
+prefix: RAS
+authors: [skpersonal]
+description: remote access plugin
+website: https://github.com/skpersonal/RemoteAccess-S
