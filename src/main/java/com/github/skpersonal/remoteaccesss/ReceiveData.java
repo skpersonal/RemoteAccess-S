@@ -1,49 +1,35 @@
 package com.github.skpersonal.remoteaccesss;
 
-import java.io.*;
+import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class ReceiveData extends Thread {
+public class ReceiveData implements Runnable {
 
     private boolean isActive = true;
 
     void stopThread() {
-        this.isActive = false;
+        isActive = false;
     }
 
     @Override
     public void run() {
-        while (this.isActive) {
-            try {
-                ServerSocket svsocket = new ServerSocket(25585);
+        try {
+            ServerSocket svsocket = new ServerSocket(25585);
+            while (isActive) {
                 Socket socket = svsocket.accept();
-                InputStream input = socket.getInputStream();
-                OutputStream output = socket.getOutputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                PrintWriter writer = new PrintWriter(output, true);
-                String str;
-                while (true) {
-                    str = reader.readLine();
-                    if (str.equalsIgnoreCase("q")) {
-                        break;
-                    } else {
-                        System.out.println(str);
-                        //Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), str);
-                    }
-                }
-                reader.close();
-                writer.close();
-                input.close();
-                output.close();
-                socket.close();
-                svsocket.close();
-            } catch (SocketException se) {
-                System.out.println("socketが切断されました");
-            } catch (IOException e) {
-                e.printStackTrace();
+                Connection connection = new Connection(socket);
+                Thread thread = new Thread(connection);
+                thread.start();
             }
+        } catch (BindException e) {
+
+        } catch (SocketException se) {
+            System.out.println("socketが切断されました");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

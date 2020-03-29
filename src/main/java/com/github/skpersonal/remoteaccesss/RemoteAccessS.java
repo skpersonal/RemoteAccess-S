@@ -8,7 +8,8 @@ public final class RemoteAccessS extends JavaPlugin {
     @Override
     public void onEnable() {
         receiveData = new ReceiveData();
-        receiveData.start();
+        Thread thread = new Thread(receiveData);
+        thread.start();
     }
 
     @Override
