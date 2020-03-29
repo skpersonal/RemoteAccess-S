@@ -1,10 +1,9 @@
 package com.github.skpersonal.remoteaccesss;
 
-import org.bukkit.Bukkit;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ReceiveData extends Thread {
 
@@ -30,7 +29,8 @@ public class ReceiveData extends Thread {
                     if (str.equalsIgnoreCase("q")) {
                         break;
                     } else {
-                        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), str);
+                        System.out.println(str);
+                        //Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), str);
                     }
                 }
                 reader.close();
@@ -39,6 +39,8 @@ public class ReceiveData extends Thread {
                 output.close();
                 socket.close();
                 svsocket.close();
+            } catch (SocketException se) {
+                System.out.println("socketが切断されました");
             } catch (IOException e) {
                 e.printStackTrace();
             }
